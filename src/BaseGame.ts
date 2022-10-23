@@ -3,6 +3,8 @@ import Level from "./Level";
 import Piece from "./Piece";
 import Utils from "./Utils";
 
+// teszt
+
 export default abstract class BaseGame implements IBaseGame {
   protected moving: boolean = false;
 
