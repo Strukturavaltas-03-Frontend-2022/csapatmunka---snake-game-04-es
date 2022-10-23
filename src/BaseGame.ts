@@ -19,7 +19,7 @@ export default abstract class BaseGame implements IBaseGame {
     /**
      * @returns {number}
      * Egy random számot szorozz meg a this.levels.length-szel, 
-     * majd kerekítsd lefelé, ez lesz az index.
+     * majd kerekítsd lefelé, ez lesz az index. --
      * Majd térj vissza a this.levels tömbnek ezzel az indexével.
      */
     abstract getRandomLevel(): Level;
