@@ -28,6 +28,23 @@ export default class Game extends BaseGame {
     this.setEvents();
   }
 
+  getRandomLevel(): Level {
+    return this.levels[Math.floor(Math.random() * this.levels.length)];
+  };
+
+  mayIHaveGoldenApple(): boolean {
+    const chance = 5;
+    const pick = Math.random() * 100;
+    
+    return pick < chance;
+  };
+
+  removeGrid (): void {
+    let grids = document.querySelectorAll('.vertical-grid .horizontal-grid');
+    grids.forEach(el => Utils.removeNode(el));
+    this.gridVisible = false;
+  };
+
   get highScore (): number {
     return parseInt(localStorage.getItem('high-score') || '0', 10) || 0;
   }
@@ -172,12 +189,10 @@ export default class Game extends BaseGame {
         this.growth += 1; // Snake got bigger
       }
 
-      this.updateScore(type === 'food' ? 10 : 50); // Calculate the new score
+      this.updateScore(type === 'food' ? 1 : -2); // Calculate the new score
       this.showScore(); // Update the score
     }
   }
-
-  
 
   handleGoldenApple () {
     if (this.goldenApple === null) {
@@ -238,7 +253,7 @@ export default class Game extends BaseGame {
       return this.score;
     }
 
-    this.score += won;
+    this.score = this.score >= 20 ? 0 : this.score + won;
 
     return this.score;
   }
@@ -315,19 +330,28 @@ export default class Game extends BaseGame {
   }
 
   /**
-   * Don"t let snake to go backwards
+   * Don't let snake to go backwards
    */
   // eslint-disable-next-line class-methods-use-this
   notBackwards (key: number): boolean {
     const lastDirection = Directions.peek();
 
-    if ((lastDirection === keys.UP && key === keys.DOWN)
-        || (lastDirection === keys.DOWN && key === keys.UP)
-        || (lastDirection === keys.LEFT && key === keys.RIGHT)
-        || (lastDirection === keys.RIGHT && key === keys.LEFT)) {
-      return false;
-    }
-    return true;
+    return !((lastDirection === keys.UP && key === keys.DOWN)
+      || (lastDirection === keys.DOWN && key === keys.UP)
+      || (lastDirection === keys.LEFT && key === keys.RIGHT)
+      || (lastDirection === keys.RIGHT && key === keys.LEFT));
+  }
+
+  /**
+   * Don't let snake to go right
+   */
+  noRight (key: number): boolean {
+    const lastDirection = Directions.peek();
+
+    return !((lastDirection === keys.UP && key === keys.RIGHT)
+      || (lastDirection === keys.DOWN && key === keys.LEFT)
+      || (lastDirection === keys.LEFT && key === keys.UP)
+      || (lastDirection === keys.RIGHT && key === keys.DOWN));
   }
 
   setEvents (): void {
@@ -389,7 +413,7 @@ export default class Game extends BaseGame {
             }
           }
 
-          if (e.keyCode in keys && this.notBackwards(e.keyCode)) {
+          if (e.keyCode in keys && this.notBackwards(e.keyCode) && this.noRight(e.keyCode)) {
             if (Directions.peek() !== e.keyCode) {
               Directions.set(e.keyCode);
             } else {
