@@ -3,8 +3,6 @@ import Level from "./Level";
 import Piece from "./Piece";
 import Utils from "./Utils";
 
-// teszt
-
 export default abstract class BaseGame implements IBaseGame {
   protected moving: boolean = false;
 
@@ -17,6 +15,30 @@ export default abstract class BaseGame implements IBaseGame {
   protected keyHeld: number = 0;
 
   protected noClip: boolean = false;
+
+  head: Piece;
+
+  tail: Piece;
+
+  /** @default null */
+  food: Piece | null = null;
+
+  /** @default null */
+  goldenApple: Piece | null = null;
+
+  /** @default 0 */
+  length: number = 0;
+
+  /** @default 0 */
+  growth: number = 0;
+
+  /** @default 0 */
+  score: number = 0;
+
+  /** @default null */
+  currentLevel: Level | null = null;
+
+  garden: HTMLDivElement;
 
   /**
    * @returns {number}
