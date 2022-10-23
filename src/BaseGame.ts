@@ -4,6 +4,7 @@ import Piece from "./Piece";
 import Utils from "./Utils";
 
 export default abstract class BaseGame implements IBaseGame {
+
     protected moving: boolean = false;
 
     protected paused: boolean = false;
